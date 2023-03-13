@@ -7,12 +7,26 @@
     <style>
       body {
         color: #fff;
-        background-color: #16161d;
+        background-color: #2a2a37;
+        text-align: center;
+        margin: 0;
       }
+
       #content {
-        max-width: 1024px;
+        background-color: #16161d;
+        max-width: calc(1024px - 12rem);
         margin: 0 auto;
         padding-top: 8rem;
+        padding: 8rem 6rem 0 6rem;
+        height: 100vh;
+        max-height: calc(100vh - 8rem);
+        overflow: hidden;
+      }
+
+      #container {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
       }
 
       h1, h2, h3, h4, h5, h6 {
@@ -20,15 +34,64 @@
         padding-bottom: 0.5rem;
       }
 
+      #next, #prev {
+        width: 6rem;
+      }
+
       p {
         color: #dcd7ba;
       }
-    </style>
+  </style>
   </head>
 
   <body>
-    <div id="content">
-      <!-- content -->
+    <div id="container">
+        <div id="prev">prev</div>
+          <main id="content">
+          <!-- content -->
+          </main>
+        <div id="next">next</div>
     </div>
+    <script>
+      <!-- controls -->
+      const elPrev = document.getElementById("prev");
+      const elNext = document.getElementById("next");
+
+      const currentSlide = Number(window.location.pathname.split("/").pop());
+
+      const nextSlide = () => {
+        console.log("next");
+
+        if(currentSlide === slideLen) {
+          return
+        }
+
+        window.location.href = `/${currentSlide + 1}`;
+      };
+
+      const prevSlide = () => {
+        console.log("prev");
+
+        if(currentSlide === 0) {
+          return
+        }
+
+        window.location.href = `/${currentSlide - 1}`;
+      };
+
+      elPrev.addEventListener("click", prevSlide);
+      elPrev.addEventListener("keypress", prevSlide);
+      elNext.addEventListener("click", nextSlide);
+
+      document.addEventListener("keyup", (e) => {
+        console.log(e.key);
+          if(e.key === "h" || e.key === "j" || e.key === "ArrowLeft" || e.key === "ArrowDown") {
+            prevSlide();
+          } else if(e.key === "l" || e.key === "k" || e.key === "ArrowRight" || e.key === "ArrowUp") {
+            nextSlide();
+          }
+      })
+
+    </script>
   </body>
 </html>
