@@ -20,17 +20,32 @@ fn handle_connection(mut stream: TcpStream) {
 
     let slides = md_parser::create_slides("content/rust.md").unwrap();
     let path = &request_line.split(" ").collect::<Vec<&str>>()[1][1..];
-    let current_slide = path.parse::<usize>().unwrap();
-    let slide = md_parser::safe_get_current_slide(&slides, current_slide);
 
-    let (status_line, content) = match md_parser::add_slide(&slide, &slides) {
-        Ok(c) => ("HTTP/1.1 200 OK", c),
-        Err(_) => ("HTTP/1.1 404 NOT FOUND", "<h1>404</h1>".to_string()),
+    print!("path {}", path);
+    let can_we_parse = match path.parse::<usize>() {
+        Ok(_) => true,
+        Err(_) => false,
     };
 
-    let length = content.len();
+    if can_we_parse {
+        let current_slide = path.parse::<usize>().unwrap();
 
-    let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{content}");
+        print!("current_slide {}", current_slide);
+        let slide = md_parser::safe_get_current_slide(&slides, current_slide);
 
-    stream.write_all(response.as_bytes()).unwrap();
+        let (status_line, content) = match md_parser::add_slide(&slide, &slides) {
+            Ok(c) => ("HTTP/1.1 200 OK", c),
+            Err(_) => ("HTTP/1.1 404 NOT FOUND", "<h1>404</h1>".to_string()),
+        };
+
+        let length = content.len();
+
+        let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{content}");
+
+        stream.write_all(response.as_bytes()).unwrap();
+    } else {
+        stream
+            .write_all("HTTP/1.1 404 NOT FOUND\r\n\r".as_bytes())
+            .unwrap();
+    }
 }

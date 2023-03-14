@@ -5,10 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rust presentation</title>
     <style>
+
+      blockquote {
+          background: #2c2c38;
+          padding: 8px 16px;
+          margin: 0;
+          quotes: '"' '"' "'" "'";
+          display: flex;
+      }
+      blockquote::before {
+        font-size: 4rem;
+        content: open-quote;
+      }
+      blockquote::after {
+        content: close-quote;
+        font-size: 4rem;
+      }
+      ul {
+        list-style: none;
+        color: #98bb6c;
+        padding: 0;
+      }
+
+      img {
+        width: 100%;
+      }
+
+      li {
+        padding: 2px 16px;
+        color: white;
+      }
+
+      a {
+        color: #ffa066;
+      }
+
+      a:visited {
+        color: #6a9589;
+      }
+
+      li::before {
+        content: "-";
+        color: #e46876;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+        font-size: 1.7rem;
+      }
+
       body {
         color: #fff;
         background-color: #2a2a37;
-        text-align: center;
+        text-align: left;
         margin: 0;
       }
 
@@ -46,23 +94,18 @@
 
   <body>
     <div id="container">
-        <div id="prev">prev</div>
           <main id="content">
           <!-- content -->
           </main>
-        <div id="next">next</div>
     </div>
     <script>
       <!-- controls -->
-      const elPrev = document.getElementById("prev");
-      const elNext = document.getElementById("next");
-
       const currentSlide = Number(window.location.pathname.split("/").pop());
 
       const nextSlide = () => {
         console.log("next");
 
-        if(currentSlide === slideLen) {
+        if(currentSlide === (slideLen - 1)) {
           return
         }
 
@@ -78,10 +121,6 @@
 
         window.location.href = `/${currentSlide - 1}`;
       };
-
-      elPrev.addEventListener("click", prevSlide);
-      elPrev.addEventListener("keypress", prevSlide);
-      elNext.addEventListener("click", nextSlide);
 
       document.addEventListener("keyup", (e) => {
         console.log(e.key);

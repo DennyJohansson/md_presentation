@@ -12,6 +12,7 @@ pub fn safe_get_current_slide(slides: &Vec<String>, idx: usize) -> String {
     if idx >= slides.len() {
         slides[slides.len() - 1].clone()
     } else {
+        print!("idx {}", idx);
         slides[idx].clone()
     }
 }
